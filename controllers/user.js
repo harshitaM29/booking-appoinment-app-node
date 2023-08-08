@@ -1,27 +1,26 @@
 const User = require('../models/user');
 
-exports.getUserInfo = (req,res,next) => {
-    User.findAll()
-    .then(users => {
-        res.json(users);
-    })
+exports.getUserInfo = async(req,res,next) => {
+   const users = await User.findAll();
+   res.status(200).json(users)
 };
 
-exports.postUserInfo = (req,res,next) => {
+exports.postUserInfo = async(req,res,next) => {
     console.log(req.body)
     const name = req.body.name;
     const email = req.body.email;
     const phone = req.body.phone;
-    User.create({
+   const data = await User.create({
         name:name,
         email:email,
         phone:phone
-    }).then(res => console.log(res))
-    .catch(err => console.log(err))
+    });
+    res.status(201).json(data)
+  
 };
 
 exports.deleteUserInfo = (req,res,next) => {
-    const userId = req.body.id;
+    const userId = req.params.id;
     console.log("userid",userId)
     User.findByPk(userId)
     .then(user => {
